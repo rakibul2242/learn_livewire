@@ -1,9 +1,9 @@
-<div class="max-w-4xl mx-auto px-4 py-10 bg-white shadow rounded-lg">
-    <h2 class="text-3xl font-bold text-center border-b pb-4 mb-8">
+<div class="max-w-4xl mx-auto px-4 py-10">
+    <h2 class="text-3xl font-bold text-center border-b pb-4 mb-10">
         Add a <span class="text-blue-500">Course</span>
     </h2>
 
-    <form wire:submit="save" class="space-y-6" enctype="multipart/form-data">
+    <form wire:submit="save" class="space-y-6 shadow bg-white rounded p-6" enctype="multipart/form-data">
         <div>
             <label class="block text-sm font-semibold mb-1">Title</label>
             <input type="text" wire:model="title"

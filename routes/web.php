@@ -28,6 +28,6 @@ use App\Livewire\Counter;
 use App\Livewire\CreateCourse;
 
 Route::get('/', CoursesList::class);
-Route::get('courses/create', CreateCourse::class)->name('courses.create'); 
+Route::get('create-course', CreateCourse::class)->name('courses.create'); 
 Route::get('/counter', Counter::class);
 require __DIR__.'/auth.php';
