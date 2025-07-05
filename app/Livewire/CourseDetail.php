@@ -11,23 +11,44 @@ class CourseDetail extends Component
     use WithPagination;
 
     public Course $course;
+    public $typeFilter = '';
 
-    protected $paginationTheme = 'tailwind'; // Optional: use Tailwind styling for pagination links
+    protected $queryString = ['typeFilter'];
 
     public function mount(Course $course)
     {
         $this->course = $course->load('instructor');
     }
 
+    public function updatedTypeFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function getContentsProperty()
+    {
+        return $this->course->contents()
+            ->when($this->typeFilter, function ($query) {
+                $query->where('type', $this->typeFilter);
+            })
+            ->latest()
+            ->paginate(9);
+    }
+
+    public function delete($id)
+    {
+        $course = Course::findOrFail($id);
+        $course->delete();
+
+        session()->flash('success', 'Course deleted successfully.');
+        return redirect()->route('courses');
+    }
+
     public function render()
     {
-        $videos = $this->course
-            ->videos()
-            ->orderBy('id') // or by title, etc.
-            ->paginate(6);
-
         return view('livewire.course-detail', [
-            'videos' => $videos,
+            'course' => $this->course,
+            'contents' => $this->contents,
         ]);
     }
 }

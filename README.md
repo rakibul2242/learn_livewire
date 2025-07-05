@@ -19,5 +19,5 @@ from validation
 
 
 ~-------------~
-
+student/teacher dashboard
  $this->course = $course->load(['videos', 'instructor']);

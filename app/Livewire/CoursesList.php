@@ -17,13 +17,31 @@ class CoursesList extends Component
 
     public function enroll($courseId)
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Please log in to enroll in a course.');
+        if (!session()->has('user_id')) {
+            session()->flash('error', 'Please login as a student to enroll.');
             return;
         }
 
-        $user = Auth::user();
-        $user->courses()->syncWithoutDetaching([$courseId]);
+        if (session('user_role') !== 'student') {
+            session()->flash('error', 'Only students can enroll in courses.');
+            return;
+        }
+
+        $userId = session('user_id');
+
+        $already = \DB::table('enrollments')->where('user_id', $userId)->where('course_id', $courseId)->exists();
+
+        if ($already) {
+            session()->flash('error', 'You are already enrolled in this course.');
+            return;
+        }
+
+        \DB::table('enrollments')->insert([
+            'user_id' => $userId,
+            'course_id' => $courseId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         session()->flash('success', 'You have successfully enrolled!');
     }
