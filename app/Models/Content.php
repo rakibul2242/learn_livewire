@@ -19,13 +19,11 @@ class Content extends Model
         'quiz_data',
     ];
 
-    // Content belongs to a course
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    // Optional: Cast quiz JSON to array
     protected $casts = [
         'quiz_data' => 'array',
     ];

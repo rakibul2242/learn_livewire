@@ -9,7 +9,6 @@ class Course extends Model
 {
     protected $fillable = ['title', 'slug', 'category', 'description', 'price', 'image', 'level', 'instructor_id'];
 
-    // Auto-generate slug from title
     protected static function booted(): void
     {
         static::creating(function ($course) {
@@ -25,25 +24,21 @@ class Course extends Model
         });
     }
 
-    // Relationship to instructor
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');
     }
 
-    // Relationship to videos/lessons
     public function videos()
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Content::class)->where('type', 'video');
     }
 
-    // Calculate total duration based on videos
     public function totalDurationInMinutes(): int
     {
-        return $this->videos()->sum('duration'); // assumed in minutes
+        return $this->videos()->sum('duration');
     }
 
-    // Format duration like "2h 15m"
     public function formattedDuration(): string
     {
         $minutes = $this->totalDurationInMinutes();
@@ -55,5 +50,13 @@ class Course extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'user_id');
+    }
+    public function contents()
+    {
+        return $this->hasMany(Content::class);
     }
 }

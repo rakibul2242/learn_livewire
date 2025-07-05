@@ -19,7 +19,7 @@ class CreateContent extends Component
     public $content_text;
     public $videoFile;
     public $duration;
-    public $quiz_json;
+    public $quiz;
 
     public function mount(Course $course)
     {
@@ -47,7 +47,7 @@ class CreateContent extends Component
             $rules['videoFile'] = 'required|file|mimes:mp4|max:10240';
             $rules['duration'] = 'required|integer|min:1';
         } elseif ($this->confirmedType === 'quiz') {
-            $rules['quiz_json'] = 'required|json';
+            $rules['quiz'] = 'required|string';
         }
 
         $this->validate($rules);
@@ -64,13 +64,12 @@ class CreateContent extends Component
             'content_text' => $this->content_text,
             'video_url' => $videoPath,
             'duration' => $this->duration,
-            'quiz_data' => $this->quiz_json,
+            'quiz_data' => $this->quiz,
         ]);
 
         session()->flash('message', 'Content added successfully!');
 
-        // Do not reset `confirmedType` or `type`
-        $this->reset(['title', 'content_text', 'videoFile', 'duration', 'quiz_json']);
+        $this->reset(['title', 'content_text', 'videoFile', 'duration', 'quiz']);
     }
 
     public function render()

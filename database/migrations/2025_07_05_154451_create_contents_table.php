@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->text('content_text')->nullable();
             $table->integer('duration')->nullable();
             $table->string('video_url')->nullable();
-            $table->json('quiz_data')->nullable();
+            $table->string('quiz_data')->nullable();
             $table->timestamps();
         });
     }
