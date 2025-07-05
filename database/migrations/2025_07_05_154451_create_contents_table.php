@@ -7,18 +7,21 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->integer('duration');
-            $table->string('video_url');
+            $table->enum('type', ['text', 'video', 'quiz'])->default('text');
+            $table->text('content_text')->nullable();
+            $table->integer('duration')->nullable();
+            $table->string('video_url')->nullable();
+            $table->json('quiz_data')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('videos');
+        Schema::dropIfExists('contents');
     }
 };

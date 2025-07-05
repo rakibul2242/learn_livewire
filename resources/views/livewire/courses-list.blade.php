@@ -2,7 +2,7 @@
     <h2 class="text-3xl font-bold text-center border-b-2 mb-10">Available <span class="text-blue-500">Courses</span></h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @foreach ($courses as $course)
-            <a class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-4 cursor-pointer">
+            <a class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-4 cursor-pointer" href="{{ url('/course/'.$course->slug) }}" wire:navigate >
                 <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('storage/No-Image-Found.png') }}" alt="{{ $course->title }}" class="w-full shadow-md border h-48 object-cover rounded-md mb-4">
                 <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $course->title }}</h3>
                 <p class="text-sm text-gray-500 mb-1">Category: {{ $course->category ?? 'N/A' }}</p>

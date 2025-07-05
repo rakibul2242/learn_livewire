@@ -12,7 +12,7 @@ class CoursesList extends Component
 
     public function mount()
     {
-        $this->courses = Course::with('instructor', 'videos')->latest()->get();
+        $this->courses = Course::all();
     }
 
     public function enroll($courseId)

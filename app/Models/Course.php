@@ -2,21 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    
-    protected $fillable = [
-        'title',
-        'slug',
-        'category',
-        'description',
-        'price',
-        'image',
-        'level',
-        'instructor_id',
-    ];
+    protected $fillable = ['title', 'slug', 'category', 'description', 'price', 'image', 'level', 'instructor_id'];
 
     // Auto-generate slug from title
     protected static function booted(): void
@@ -60,5 +51,9 @@ class Course extends Model
         $mins = $minutes % 60;
 
         return ($hours ? "{$hours}h " : '') . ($mins ? "{$mins}m" : '');
+    }
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

@@ -18,25 +18,32 @@ class CreateCourse extends Component
     public $description = '';
     public $price = '';
     public $image = '';
-    public $instructor_name = '';
     public $instructor_id = '';
-    public $instructors = '';
+    public $instructors = [];
 
     public function mount()
     {
-        $this->instructors = User::all();
+        $this->instructors = User::Where('role', 'instructor')->get();
     }
 
     protected $rules = [
         'title' => 'required|string|max:255',
-        'slug' => 'required|string|unique:courses,slug',
-        'category' => 'nullable|string',
-        'description' => 'nullable|string',
+        'category' => 'required|string',
+        'description' => 'required|string',
         'price' => 'required|numeric|min:0',
-        'image' => 'nullable|image|max:2048',
-        'instructor_name' => 'nullable|string|max:255',
-        'instructor_id' => 'nullable|exists:users,id',
+        'image' => 'required|image|max:2048',
+        'instructor_id' => 'required|exists:users,id',
     ];
+
+    public function updated($property)
+    {
+        $this->validateOnly($property);
+    }
+
+    public function updatedTitle($value)
+    {
+        $this->slug = Str::slug($value);
+    }
 
     public function save()
     {
@@ -46,17 +53,17 @@ class CreateCourse extends Component
 
         Course::create([
             'title' => $this->title,
+            'slug' => $this->slug,
             'slug' => Str::slug($this->slug),
             'category' => $this->category,
             'description' => $this->description,
             'price' => $this->price,
             'image' => $imagePath,
-            'instructor_name' => $this->instructor_name,
             'instructor_id' => $this->instructor_id,
         ]);
 
         session()->flash('success', 'Course added successfully.');
-        return redirect()->route('');
+        return redirect()->route('home');
     }
 
     public function render()
